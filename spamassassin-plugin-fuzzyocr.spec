@@ -2,7 +2,7 @@ Summary:	FuzzyOcr SpamAssassin plugin
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.5.1
 Release:	0.3
-License:	Apache 2.0
+License:	Apache Software License v2
 Group:		Applications/Mail
 Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
 # Source0-md5:	14e04c4768f57a39a4953a837766f772
