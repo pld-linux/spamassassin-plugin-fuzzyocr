@@ -6,13 +6,14 @@ License:	Apache 2.0
 Group:		Applications
 Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}.tar.gz
 # Source0-md5:	51edf3fa63a4438ce26b2fc15f28ff00
+Patch0:		fuzzyocr-config.patch
 URL:		http://fuzzyocr.own-hero.net/
 Requires:	ImageMagick
 Requires:	giflib-progs >= 4.1.4-4
 Requires:	gifsicle
 Requires:	gocr >= 0.43
-Requires:	ocrad >= 0.14
 Requires:	netpbm
+Requires:	ocrad >= 0.14
 Requires:	perl(Time::HiRes)
 Requires:	perl-Digest-MD5
 Requires:	perl-Mail-SpamAssassin >= 3.1.4
@@ -38,6 +39,7 @@ The methods mainly are:
 
 %prep
 %setup -q -n FuzzyOcr-%{version}
+%patch0 -p1
 
 %install
 rm -rf $RPM_BUILD_ROOT

@@ -1,0 +1,22 @@
+--- FuzzyOcr-2.3b/FuzzyOcr.cf~	2006-08-25 23:56:00.000000000 +0300
++++ FuzzyOcr-2.3b/FuzzyOcr.cf	2007-01-09 16:31:19.803951523 +0200
+@@ -1,4 +1,6 @@
+-loadplugin FuzzyOcr FuzzyOcr.pm
++# vim:syn=config
++
++loadplugin FuzzyOcr
+ body FUZZY_OCR eval:fuzzyocr_check()
+ describe FUZZY_OCR Mail contains an image with common spam text inside
+ body FUZZY_OCR_WRONG_CTYPE eval:dummy_check()
+@@ -15,9 +17,9 @@
+ #### Logging options #####
+ # Verbosity level (see manual) Attention: Don't set to 0, but to 0.0 for quiet operation. (Default value: 1)
+ #focr_verbose 1
+-#
++
+ # Logfile (make sure it is writable by the plugin) (Default value: /etc/mail/spamassassin/FuzzyOcr.log)
+-focr_logfile /etc/mail/spamassassin/FuzzyOcr.log
++focr_logfile /var/log/FuzzyOcr.log
+ ##########################
+ 
+ ##### Wordlists #####
