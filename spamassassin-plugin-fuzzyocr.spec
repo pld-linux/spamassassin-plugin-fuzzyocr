@@ -1,13 +1,14 @@
 Summary:	FuzzyOcr SpamAssassin plugin
 Name:		spamassassin-plugin-fuzzyocr
-Version:	2.3b
-Release:	1
+Version:	3.5.1
+Release:	0.1
 License:	Apache 2.0
 Group:		Applications
-Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}.tar.gz
-# Source0-md5:	51edf3fa63a4438ce26b2fc15f28ff00
+Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
+# Source0-md5:	14e04c4768f57a39a4953a837766f772
 Patch0:		fuzzyocr-config.patch
 URL:		http://fuzzyocr.own-hero.net/
+BuildRequires:	sed >= 4.0
 Requires:	ImageMagick
 Requires:	giflib-progs >= 4.1.4-4
 Requires:	gifsicle
@@ -40,20 +41,28 @@ The methods mainly are:
 %prep
 %setup -q -n FuzzyOcr-%{version}
 %patch0 -p1
+%{__sed} -i -e '1s,#!.*perl,#!%{__perl},' Utils/fuzzy-*
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{perl_vendorlib},%{_sysconfdir}}
-cp -a FuzzyOcr.cf $RPM_BUILD_ROOT%{_sysconfdir}
-cp -a FuzzyOcr.words.sample $RPM_BUILD_ROOT%{_sysconfdir}/FuzzyOcr.words
-cp -a FuzzyOcr.pm $RPM_BUILD_ROOT%{perl_vendorlib}
+install -d $RPM_BUILD_ROOT{%{perl_vendorlib},%{_sysconfdir},%{_bindir}}
+cp -a FuzzyOcr.words FuzzyOcr.cf FuzzyOcr.scansets FuzzyOcr.preps $RPM_BUILD_ROOT%{_sysconfdir}
+cp -a FuzzyOcr FuzzyOcr.pm $RPM_BUILD_ROOT%{perl_vendorlib}
+install Utils/fuzzy-* $RPM_BUILD_ROOT%{_bindir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc FAQ INSTALL samples
+%doc FuzzyOcr.mysql samples
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/FuzzyOcr.cf
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/FuzzyOcr.preps
+%config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/FuzzyOcr.scansets
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/FuzzyOcr.words
 %{perl_vendorlib}/FuzzyOcr.pm
+%{perl_vendorlib}/FuzzyOcr
+
+%attr(755,root,root) %{_bindir}/fuzzy-cleantmp
+%attr(755,root,root) %{_bindir}/fuzzy-find
+%attr(755,root,root) %{_bindir}/fuzzy-stats
