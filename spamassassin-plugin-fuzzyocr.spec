@@ -1,9 +1,9 @@
 Summary:	FuzzyOcr SpamAssassin plugin
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.5.1
-Release:	0.2
+Release:	0.3
 License:	Apache 2.0
-Group:		Applications
+Group:		Applications/Mail
 Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
 # Source0-md5:	14e04c4768f57a39a4953a837766f772
 Patch0:		fuzzyocr-config.patch
@@ -19,6 +19,7 @@ Requires:	perl(Time::HiRes)
 Requires:	perl-Digest-MD5
 Requires:	perl-Mail-SpamAssassin >= 3.1.4
 Requires:	perl-String-Approx
+Requires:	tesseract
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
