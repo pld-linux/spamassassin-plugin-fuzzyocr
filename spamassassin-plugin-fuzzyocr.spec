@@ -1,7 +1,7 @@
 Summary:	FuzzyOcr SpamAssassin plugin
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.5.1
-Release:	0.1
+Release:	0.2
 License:	Apache 2.0
 Group:		Applications
 Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
@@ -13,7 +13,7 @@ Requires:	ImageMagick
 Requires:	giflib-progs >= 4.1.4-4
 Requires:	gifsicle
 Requires:	gocr >= 0.43
-Requires:	netpbm
+Requires:	netpbm-progs >= 10.34
 Requires:	ocrad >= 0.14
 Requires:	perl(Time::HiRes)
 Requires:	perl-Digest-MD5
