@@ -20,6 +20,7 @@ Requires:	perl-DBI
 Requires:	perl-Digest-MD5
 Requires:	perl-Mail-SpamAssassin >= 3.1.4
 Requires:	perl-MLDBM
+Requires:	perl-MLDBM-Sync
 Requires:	perl-String-Approx
 Requires:	tesseract
 BuildArch:	noarch
