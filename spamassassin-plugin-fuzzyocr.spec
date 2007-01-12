@@ -16,6 +16,7 @@ Requires:	gocr >= 0.43
 Requires:	netpbm-progs >= 10.34
 Requires:	ocrad >= 0.14
 Requires:	perl(Time::HiRes)
+Requires:	perl-DBI
 Requires:	perl-Digest-MD5
 Requires:	perl-Mail-SpamAssassin >= 3.1.4
 Requires:	perl-MLDBM
