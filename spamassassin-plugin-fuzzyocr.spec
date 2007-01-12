@@ -1,7 +1,8 @@
+%include	/usr/lib/rpm/macros.perl
 Summary:	FuzzyOcr SpamAssassin plugin
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.5.1
-Release:	0.3
+Release:	0.4
 License:	Apache Software License v2
 Group:		Applications/Mail
 Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
@@ -16,10 +17,8 @@ Requires:	gocr >= 0.43
 Requires:	netpbm-progs >= 10.34
 Requires:	ocrad >= 0.14
 Requires:	perl(Time::HiRes)
-Requires:	perl-DBI
 Requires:	perl-Digest-MD5
 Requires:	perl-Mail-SpamAssassin >= 3.1.4
-Requires:	perl-MLDBM
 Requires:	perl-MLDBM-Sync
 Requires:	perl-String-Approx
 Requires:	tesseract
