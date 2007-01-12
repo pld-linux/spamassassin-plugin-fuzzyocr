@@ -1,3 +1,7 @@
+#
+# Conditional build:
+%bcond_without	autodeps	# don't BR packages needed only for resolving deps
+#
 %include	/usr/lib/rpm/macros.perl
 Summary:	FuzzyOcr SpamAssassin plugin
 Name:		spamassassin-plugin-fuzzyocr
@@ -10,6 +14,16 @@ Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.t
 Patch0:		fuzzyocr-config.patch
 URL:		http://fuzzyocr.own-hero.net/
 BuildRequires:	sed >= 4.0
+%if %{with autodeps}
+BuildRequires:	perl(Time::HiRes)
+BuildRequires:	perl-DBI
+BuildRequires:	perl-DBI
+BuildRequires:	perl-Digest-MD5
+BuildRequires:	perl-MLDBM
+BuildRequires:	perl-MLDBM-Sync
+BuildRequires:	perl-Mail-SpamAssassin >= 3.1.4
+BuildRequires:	perl-String-Approx
+%endif
 Requires:	ImageMagick
 Requires:	giflib-progs >= 4.1.4-4
 Requires:	gifsicle
@@ -18,8 +32,8 @@ Requires:	netpbm-progs >= 10.34
 Requires:	ocrad >= 0.14
 Requires:	perl(Time::HiRes)
 Requires:	perl-Digest-MD5
-Requires:	perl-Mail-SpamAssassin >= 3.1.4
 Requires:	perl-MLDBM-Sync
+Requires:	perl-Mail-SpamAssassin >= 3.1.4
 Requires:	perl-String-Approx
 Requires:	tesseract
 BuildArch:	noarch
