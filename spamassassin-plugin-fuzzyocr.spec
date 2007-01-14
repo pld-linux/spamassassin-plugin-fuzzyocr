@@ -4,6 +4,7 @@
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	FuzzyOcr SpamAssassin plugin
+Summary(pl):	Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.5.1
 Release:	0.4
@@ -15,7 +16,6 @@ Patch0:		fuzzyocr-config.patch
 URL:		http://fuzzyocr.own-hero.net/
 BuildRequires:	sed >= 4.0
 %if %{with autodeps}
-BuildRequires:	perl(Time::HiRes)
 BuildRequires:	perl-DBI
 BuildRequires:	perl-DBI
 BuildRequires:	perl-Digest-MD5
@@ -23,6 +23,7 @@ BuildRequires:	perl-MLDBM
 BuildRequires:	perl-MLDBM-Sync
 BuildRequires:	perl-Mail-SpamAssassin >= 3.1.4
 BuildRequires:	perl-String-Approx
+BuildRequires:	perl-Time-HiRes
 %endif
 Requires:	ImageMagick
 Requires:	giflib-progs >= 4.1.4-4
@@ -30,11 +31,11 @@ Requires:	gifsicle
 Requires:	gocr >= 0.43
 Requires:	netpbm-progs >= 10.34
 Requires:	ocrad >= 0.14
-Requires:	perl(Time::HiRes)
 Requires:	perl-Digest-MD5
 Requires:	perl-MLDBM-Sync
 Requires:	perl-Mail-SpamAssassin >= 3.1.4
 Requires:	perl-String-Approx
+Requires:	perl-Time-HiRes
 Requires:	tesseract
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -55,6 +56,22 @@ The methods mainly are:
 - Dimension, size and integrity checking of images
 - Content-Type verification for the containing email
 
+%description -l pl
+FuzzyOcr to wtyczka SpamAssassina maj±ca wykrywaæ niezamówion± pocztê
+masow± (znan± tak¿e jako "spam") zawieraj±c± obrazki jako g³ówny
+no¶nik tre¶ci. Przy u¿yciu ró¿nych metod analizuje zawarto¶æ i
+w³a¶ciwo¶ci obrazków w celu rozró¿nienia miêdzy zwyk³± poczt± ("ham")
+a spamem.
+
+G³ówne metody to:
+- optyczne rozpoznawanie znaków (OCR) przy u¿yciu ró¿nych silników i
+  ustawieñ
+- algorytm przybli¿onego dopasowywania s³ów stosowany na wynikach OCR
+- system haszowania obrazków w celu uczenia siê unikalnych w³a¶ciwo¶ci
+  znanych obrazków ze spamem
+- sprawdzanie wymiarów, rozmiaru i integralno¶ci obrazków
+- weryfikacja Content-Type dla wiadomo¶ci z obrazkami
+
 %prep
 %setup -q -n FuzzyOcr-%{version}
 %patch0 -p1
@@ -73,13 +90,12 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc FuzzyOcr.mysql samples
+%attr(755,root,root) %{_bindir}/fuzzy-cleantmp
+%attr(755,root,root) %{_bindir}/fuzzy-find
+%attr(755,root,root) %{_bindir}/fuzzy-stats
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/FuzzyOcr.cf
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/FuzzyOcr.preps
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/FuzzyOcr.scansets
 %config(noreplace) %verify(not md5 mtime size) %{_sysconfdir}/FuzzyOcr.words
 %{perl_vendorlib}/FuzzyOcr.pm
 %{perl_vendorlib}/FuzzyOcr
-
-%attr(755,root,root) %{_bindir}/fuzzy-cleantmp
-%attr(755,root,root) %{_bindir}/fuzzy-find
-%attr(755,root,root) %{_bindir}/fuzzy-stats
