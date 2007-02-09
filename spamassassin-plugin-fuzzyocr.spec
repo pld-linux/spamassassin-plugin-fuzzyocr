@@ -31,10 +31,13 @@ Requires:	gifsicle
 Requires:	gocr >= 0.43
 Requires:	netpbm-progs >= 10.34
 Requires:	ocrad >= 0.14
+Requires:	perl-Compress-Zlib
+Requires:	perl-DBD-mysql
 Requires:	perl-Digest-MD5
 Requires:	perl-MLDBM-Sync
 Requires:	perl-Mail-SpamAssassin >= 3.1.4
 Requires:	perl-String-Approx
+Requires:	perl-Tie-Cache
 Requires:	perl-Time-HiRes
 Requires:	tesseract
 BuildArch:	noarch
