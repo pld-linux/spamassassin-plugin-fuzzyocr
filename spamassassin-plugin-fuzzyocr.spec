@@ -4,7 +4,7 @@
 #
 %include	/usr/lib/rpm/macros.perl
 Summary:	FuzzyOcr SpamAssassin plugin
-Summary(pl):	Wtyczka FuzzyOcr dla SpamAssassina
+Summary(pl.UTF-8):   Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.5.1
 Release:	0.4
@@ -59,21 +59,21 @@ The methods mainly are:
 - Dimension, size and integrity checking of images
 - Content-Type verification for the containing email
 
-%description -l pl
-FuzzyOcr to wtyczka SpamAssassina maj±ca wykrywaæ niezamówion± pocztê
-masow± (znan± tak¿e jako "spam") zawieraj±c± obrazki jako g³ówny
-no¶nik tre¶ci. Przy u¿yciu ró¿nych metod analizuje zawarto¶æ i
-w³a¶ciwo¶ci obrazków w celu rozró¿nienia miêdzy zwyk³± poczt± ("ham")
+%description -l pl.UTF-8
+FuzzyOcr to wtyczka SpamAssassina majÄ…ca wykrywaÄ‡ niezamÃ³wionÄ… pocztÄ™
+masowÄ… (znanÄ… takÅ¼e jako "spam") zawierajÄ…cÄ… obrazki jako gÅ‚Ã³wny
+noÅ›nik treÅ›ci. Przy uÅ¼yciu rÃ³Å¼nych metod analizuje zawartoÅ›Ä‡ i
+wÅ‚aÅ›ciwoÅ›ci obrazkÃ³w w celu rozrÃ³Å¼nienia miÄ™dzy zwykÅ‚Ä… pocztÄ… ("ham")
 a spamem.
 
-G³ówne metody to:
-- optyczne rozpoznawanie znaków (OCR) przy u¿yciu ró¿nych silników i
-  ustawieñ
-- algorytm przybli¿onego dopasowywania s³ów stosowany na wynikach OCR
-- system haszowania obrazków w celu uczenia siê unikalnych w³a¶ciwo¶ci
-  znanych obrazków ze spamem
-- sprawdzanie wymiarów, rozmiaru i integralno¶ci obrazków
-- weryfikacja Content-Type dla wiadomo¶ci z obrazkami
+GÅ‚Ã³wne metody to:
+- optyczne rozpoznawanie znakÃ³w (OCR) przy uÅ¼yciu rÃ³Å¼nych silnikÃ³w i
+  ustawieÅ„
+- algorytm przybliÅ¼onego dopasowywania sÅ‚Ã³w stosowany na wynikach OCR
+- system haszowania obrazkÃ³w w celu uczenia siÄ™ unikalnych wÅ‚aÅ›ciwoÅ›ci
+  znanych obrazkÃ³w ze spamem
+- sprawdzanie wymiarÃ³w, rozmiaru i integralnoÅ›ci obrazkÃ³w
+- weryfikacja Content-Type dla wiadomoÅ›ci z obrazkami
 
 %prep
 %setup -q -n FuzzyOcr-%{version}
