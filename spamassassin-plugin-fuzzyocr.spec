@@ -7,11 +7,13 @@ Summary:	FuzzyOcr SpamAssassin plugin
 Summary(pl.UTF-8):	Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.5.1
-Release:	0.4
+%define		_snap	svn132
+Release:	1.%{_snap}.1
 License:	Apache Software License v2
 Group:		Applications/Mail
-Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
-# Source0-md5:	14e04c4768f57a39a4953a837766f772
+#Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
+Source0:	http://www.blues.gda.pl/SOURCES/fuzzyocr-%{version}-%{_snap}-devel.tar.bz2
+# Source0-md5:	6b8c70ed9b72312f8c6cd522a3ebd0ab
 Patch0:		fuzzyocr-config.patch
 URL:		http://fuzzyocr.own-hero.net/
 BuildRequires:	sed >= 4.0
@@ -39,7 +41,14 @@ Requires:	perl-Mail-SpamAssassin >= 3.1.4
 Requires:	perl-String-Approx
 Requires:	perl-Tie-Cache
 Requires:	perl-Time-HiRes
-Requires:	tesseract
+# It's optional, disabled by default:
+Suggests:	tesseract
+# For pdf-processing:
+Suggests:	poppler-progs
+# Has problems with some pdfs:
+Conflicts:	xpdf-tools
+# Requred anyway, but maybe it should be suggests only?
+#Suggests:	netpbm-progs
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -76,7 +85,7 @@ Główne metody to:
 - weryfikacja Content-Type dla wiadomości z obrazkami
 
 %prep
-%setup -q -n FuzzyOcr-%{version}
+%setup -q -n FuzzyOCR-%{version}
 %patch0 -p1
 %{__sed} -i -e '1s,#!.*perl,#!%{__perl},' Utils/fuzzy-*
 
