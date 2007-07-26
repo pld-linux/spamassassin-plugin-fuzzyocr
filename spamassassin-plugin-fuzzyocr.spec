@@ -45,7 +45,7 @@ Requires:	perl-Time-HiRes
 # It's optional, disabled by default:
 Suggests:	tesseract
 # For pdf-processing:
-Suggests:	poppler-progs
+Suggests:	poppler-progs <= 0.5.4
 # Has problems with some pdfs:
 Conflicts:	xpdf-tools
 # Requred anyway, but maybe it should be suggests only?
