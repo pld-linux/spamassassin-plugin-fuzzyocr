@@ -49,7 +49,7 @@ Suggests:	poppler-progs
 # Has problems with some pdfs:
 Conflicts:	poppler-progs <= 0.5.4
 Conflicts:	xpdf-tools
-# Requred anyway, but maybe it should be suggests only?
+# Required anyway, but maybe it should be suggests only?
 #Suggests:	netpbm-progs
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
