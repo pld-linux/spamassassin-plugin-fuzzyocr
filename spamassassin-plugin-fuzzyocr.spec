@@ -23,7 +23,7 @@ BuildRequires:	perl-DBI
 BuildRequires:	perl-Digest-MD5
 BuildRequires:	perl-MLDBM
 BuildRequires:	perl-MLDBM-Sync
-BuildRequires:	perl-Mail-SpamAssassin >= 3.1.4
+BuildRequires:	perl-Mail-SpamAssassin >= 3.2.3
 BuildRequires:	perl-String-Approx
 BuildRequires:	perl-Time-HiRes
 %endif
@@ -38,7 +38,7 @@ Requires:	perl-Compress-Zlib
 Requires:	perl-DBD-mysql
 Requires:	perl-Digest-MD5
 Requires:	perl-MLDBM-Sync
-Requires:	perl-Mail-SpamAssassin >= 3.1.4
+Requires:	perl-Mail-SpamAssassin >= 3.2.3
 Requires:	perl-String-Approx
 Requires:	perl-Tie-Cache
 Requires:	perl-Time-HiRes
