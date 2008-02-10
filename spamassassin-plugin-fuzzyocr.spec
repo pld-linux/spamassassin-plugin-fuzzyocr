@@ -8,7 +8,7 @@ Summary(pl.UTF-8):	Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.5.1
 %define		_snap	svn132
-Release:	1.%{_snap}.1
+Release:	1.%{_snap}.2
 License:	Apache v2.0
 Group:		Applications/Mail
 #Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
