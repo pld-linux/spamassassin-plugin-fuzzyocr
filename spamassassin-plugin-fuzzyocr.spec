@@ -13,8 +13,8 @@ Release:	1.%{subver}.%{rel}
 License:	Apache v2.0
 Group:		Applications/Mail
 #Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
-# Source0-md5:	6b8c70ed9b72312f8c6cd522a3ebd0ab
 Source0:	http://www.blues.gda.pl/SOURCES/fuzzyocr-%{version}-%{subver}-devel.tar.bz2
+# Source0-md5:	6b8c70ed9b72312f8c6cd522a3ebd0ab
 Patch0:		fuzzyocr-config.patch
 URL:		http://fuzzyocr.own-hero.net/
 BuildRequires:	sed >= 4.0
