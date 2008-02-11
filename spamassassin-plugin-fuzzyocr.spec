@@ -3,22 +3,22 @@
 %bcond_without	autodeps	# don't BR packages needed only for resolving deps
 #
 %include	/usr/lib/rpm/macros.perl
+%define		subver	svn132
+%define		rel		2
 Summary:	FuzzyOcr SpamAssassin plugin
 Summary(pl.UTF-8):	Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.5.1
-%define		_snap	svn132
-Release:	1.%{_snap}.2
+Release:	1.%{subver}.%{rel}
 License:	Apache v2.0
 Group:		Applications/Mail
 #Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}-devel.tar.gz
-Source0:	http://www.blues.gda.pl/SOURCES/fuzzyocr-%{version}-%{_snap}-devel.tar.bz2
 # Source0-md5:	6b8c70ed9b72312f8c6cd522a3ebd0ab
+Source0:	http://www.blues.gda.pl/SOURCES/fuzzyocr-%{version}-%{subver}-devel.tar.bz2
 Patch0:		fuzzyocr-config.patch
 URL:		http://fuzzyocr.own-hero.net/
 BuildRequires:	sed >= 4.0
 %if %{with autodeps}
-BuildRequires:	perl-DBI
 BuildRequires:	perl-DBI
 BuildRequires:	perl-Digest-MD5
 BuildRequires:	perl-MLDBM
@@ -47,9 +47,9 @@ Suggests:	tesseract
 # For pdf-processing:
 Suggests:	poppler-progs >= 0.5.4
 # Has problems with some pdfs:
-Conflicts:	xpdf-tools
 # Required anyway, but maybe it should be suggests only?
 #Suggests:	netpbm-progs
+Conflicts:	xpdf-tools
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
