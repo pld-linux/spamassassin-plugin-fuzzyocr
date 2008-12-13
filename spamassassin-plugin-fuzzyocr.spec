@@ -46,9 +46,9 @@ Requires:	perl-Time-HiRes
 Suggests:	tesseract
 # For pdf-processing:
 Suggests:	poppler-progs >= 0.5.4
-# Has problems with some pdfs:
 # Required anyway, but maybe it should be suggests only?
 #Suggests:	netpbm-progs
+# Has problems with some pdfs:
 Conflicts:	xpdf-tools
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
