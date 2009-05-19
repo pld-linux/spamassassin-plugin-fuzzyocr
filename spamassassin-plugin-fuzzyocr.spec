@@ -42,8 +42,9 @@ Requires:	perl-Mail-SpamAssassin >= 3.2.3
 Requires:	perl-String-Approx
 Requires:	perl-Tie-Cache
 Requires:	perl-Time-HiRes
-# It's optional, disabled by default:
+# It's optional:
 Suggests:	tesseract
+Suggests:	tesseract-lang-en
 # For pdf-processing:
 Suggests:	poppler-progs >= 0.5.4
 # Required anyway, but maybe it should be suggests only?
