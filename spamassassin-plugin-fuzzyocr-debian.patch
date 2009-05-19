@@ -1,0 +1,562 @@
+--- fuzzyocr-3.5.1+svn135.orig/debian/compat
++++ fuzzyocr-3.5.1+svn135/debian/compat
+@@ -0,0 +1 @@
++5
+--- fuzzyocr-3.5.1+svn135.orig/debian/rules
++++ fuzzyocr-3.5.1+svn135/debian/rules
+@@ -0,0 +1,90 @@
++#!/usr/bin/make -f
++# Sample debian/rules that uses debhelper. 
++# This file is public domain software, originally written by Joey Hess.
++#
++# This version is for packages that are architecture independent.
++
++# Uncomment this to turn on verbose mode.
++#export DH_VERBOSE=1
++
++package=fuzzyocr
++#destdir=/usr/share/perl5/Mail/SpamAssassin/Plugin
++destdir=/usr/share/perl5
++
++include /usr/share/quilt/quilt.make
++
++build: build-stamp
++build-stamp: patch
++	dh_testdir
++
++	# Add here commands to compile the package.
++	#$(MAKE)
++
++	touch build-stamp
++
++clean: unpatch
++	dh_testdir
++	dh_testroot
++	rm -f build-stamp
++
++	# Add here commands to clean up after the build process.
++	#-$(MAKE) clean
++	#-$(MAKE) distclean
++
++	dh_clean
++
++install: build
++	dh_testdir
++	dh_testroot
++	dh_clean -k
++	dh_installdirs
++
++	# Add here commands to install the package into debian/<packagename>.
++	#$(MAKE) prefix=`pwd`/debian/`dh_listpackages`/usr install
++	mkdir --parents `pwd`/debian/$(package)/$(destdir)
++	cp FuzzyOcr.pm `pwd`/debian/$(package)/$(destdir)/
++	cp -a FuzzyOcr `pwd`/debian/$(package)/$(destdir)/
++	mkdir --parents `pwd`/debian/$(package)/etc/spamassassin
++	cp FuzzyOcr.words FuzzyOcr.scansets FuzzyOcr.preps `pwd`/debian/$(package)/etc/spamassassin
++
++	#by this trick, when the package is removed but not purged, 
++	#  the symlink will disappear and spamassassin will ignore the real conf file
++	cp FuzzyOcr.cf  `pwd`/debian/$(package)/etc/spamassassin/FuzzyOcr.cf.real
++	ln -s FuzzyOcr.cf.real `pwd`/debian/$(package)/etc/spamassassin/FuzzyOcr.cf
++
++
++# Build architecture-independent files here.
++binary-indep: build install
++	dh_testdir
++	dh_testroot
++	dh_installchangelogs CHANGES
++	dh_installdocs Utils
++	dh_installexamples samples/*
++#	dh_installmenu
++#	dh_installdebconf
++#	dh_installlogrotate
++#	dh_installemacsen
++#	dh_installcatalogs
++#	dh_installpam
++#	dh_installmime
++#	dh_installinit
++#	dh_installcron
++#	dh_installinfo
++#	dh_undocumented
++	dh_installman
++	dh_link
++	dh_compress -X.eml -XUtils
++	dh_fixperms
++#	dh_perl
++#	dh_python
++	dh_installdeb
++	dh_gencontrol
++	dh_md5sums
++	dh_builddeb
++
++# Build architecture-dependent files here.
++binary-arch: build install
++# We have nothing to do by default.
++
++binary: binary-indep binary-arch
++.PHONY: build clean binary-indep binary-arch binary install
+--- fuzzyocr-3.5.1+svn135.orig/debian/fuzzyocr.postinst
++++ fuzzyocr-3.5.1+svn135/debian/fuzzyocr.postinst
+@@ -0,0 +1,12 @@
++#!/bin/sh
++set -e
++
++if [ -x "/etc/init.d/spamassassin" ]; then
++        if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
++                invoke-rc.d spamassassin restart || exit $?
++        else
++                /etc/init.d/spamassassin restart || exit $?
++        fi
++fi
++
++#DEBHELPER#
+--- fuzzyocr-3.5.1+svn135.orig/debian/copyright
++++ fuzzyocr-3.5.1+svn135/debian/copyright
+@@ -0,0 +1,21 @@
++This package was debianized by A Mennucc1 <mennucc1@debian.org> on
++Thu, 30 Nov 2006 11:13:32 +0100.
++
++It was downloaded from the SVN repository https://svn.own-hero.net/fuzzyocr 
++see also http://wiki.apache.org/spamassassin/FuzzyOcrPlugin 
++or  http://fuzzyocr.own-hero.net/
++
++Upstream Author: Christian Holler <decoder@own-hero.net>
++
++Copyright: Christian Holler and Jorge Valdes
++
++The Debian packaging is (C) 2006-2008, A Mennucc <mennucc1@debian.org> and
++is licensed under the GPL, see `/usr/share/common-licenlses/GPL'.
++
++
++The fuzzyocr license is the
++                                 Apache License
++                           Version 2.0, January 2004
++                        http://www.apache.org/licenses/
++See /usr/share/common-licenses/Apache-2.0 for the full text.
++
+--- fuzzyocr-3.5.1+svn135.orig/debian/control
++++ fuzzyocr-3.5.1+svn135/debian/control
+@@ -0,0 +1,24 @@
++Source: fuzzyocr
++Section: mail
++Priority: extra
++Maintainer: A Mennucc1 <mennucc1@debian.org>
++Build-Depends: debhelper (>= 5), quilt
++Standards-Version: 3.8.0.0
++
++Package: fuzzyocr
++Architecture: all
++Depends: spamassassin (>= 3), tesseract-ocr-eng | gocr | ocrad, netpbm, libungif-bin (>= 4), gifsicle, libstring-approx-perl, libdigest-md5-perl, libmldbm-sync-perl, libtie-cache-perl, libdbd-mysql-perl
++Conflicts: fuzzyocr3
++Description: spamassassin plugin to check image attachments
++ This Spamassassin plugin checks for specific keywords in image/gif,
++ image/jpeg or image/png attachments, using gocr (an optical character
++ recognition program).  This plugin can be used to detect spam that
++ puts all the real spam content in an attached image, while the mail
++ itself is only random text and random html, without any URL's or
++ identifiable information.  Additionally to the normal OcrPlugin, it
++ can do approximate matches on words, so errors in recognition or
++ attempts to obfuscate the text inside the image will not cause the
++ detection to fail. 
++ .
++ This is a development version from SVN. Currently, this SVN
++ version is the only one that works with spamassassin 3.2.
+--- fuzzyocr-3.5.1+svn135.orig/debian/README.Debian
++++ fuzzyocr-3.5.1+svn135/debian/README.Debian
+@@ -0,0 +1,73 @@
++fuzzyocr for Debian
++-------------------
++
++--- config file
++
++The main config file is installed in /etc/spamassassin/FuzzyOcr.cf.real
++
++When the package is installed, there is 
++a symlink  FuzzyOcr.cf -> FuzzyOcr.cf.real
++(so, when the package is removed, but not purged, then the 
++symlink is absent, and spamassassin does not try to 
++initialize the plugin).
++
++--- spamc/spamd
++
++In the main config file, the settings for focr_logfile and
++focr_digest_db do not make sense when an user is using spamc/spamd (as
++I do).  Currently both are then disabled.  This way, FuzzyOcr works
++out-of-the-box with spamc/spamd
++
++It is still possible, though, for an user to use those features;
++for example, I added into /home/debdev/.spamassassin/user_prefs
++ focr_verbose 2
++ focr_logfile /home/debdev/var/FuzzyOcr.log
++ focr_enable_image_hashing 1
++ focr_digest_db /home/debdev/var/FuzzyOcr.hashdb
++
++
++ -- A Mennucc1 <mennucc1@debian.org>, Sun, 28 Sep 2008 09:26:50 +0200
++
++This following is an upstream introduction to FuzzyOcr:
++
++FuzzyOcr is a plugin for SpamAssassin which is aimed at unsolicited
++bulk mail (also known as "Spam") containing images as the main content
++carrier. Using different methods, it analyzes the content and
++properties of images to distinguish between normal mails (Ham) and
++spam mails. The methods mainly are:
++
++    * Optical Character Recognition using different engines and settings
++    * Fuzzy word matching algorithm applied to OCR results
++    * Image hashing system to learn unique properties of known spam images
++    * Dimension, size and integrity checking of images
++    * Content-Type verification for the containing email 
++
++For a brief description of features, resource aspects and scalability,
++ see the detailed list below:
++
++    * Matching and learning techniques
++          o Flexible Optical Character Recognition interface
++                + Official Support for gocr and ocrad
++                + Generic support for TesserAct and others upcoming 
++                    (planned for 3.5) 
++          o Fuzzy word matching algorithm applied to OCR results
++          o Recognition of duplicate (already processed) or similar images
++                         using feature vectors (Hashing)
++                + Efficient MLDBM database
++                + Mysql Support (planned for 3.5) 
++          o Dimension, size and integrity checking
++          o Content-Type checking of containing email 
++
++    * Resource saving techniques
++          o Only scan mails which where not recognized yet as Ham or Spam 
++               by other SpamAssassin rules or plugins (using score thresholds)
++          o Optional skip of other scanning facilities once one scores 
++                 already with a given threshold (planned for 3.5)
++          o Mail skipping based on direct feature analysis
++                 (Dimensions and file size)  (planned for 3.5) 
++
++    * Safety measures
++          o Configurable timeout against Denial of Service attacks against
++              the third party tools
++          o Context based word sets instead of simple lists to prevent
++              false positives (planned for 3.5) 
+--- fuzzyocr-3.5.1+svn135.orig/debian/fuzzyocr.postrm
++++ fuzzyocr-3.5.1+svn135/debian/fuzzyocr.postrm
+@@ -0,0 +1,12 @@
++#!/bin/sh
++set -e
++
++if [ -x "/etc/init.d/spamassassin" ]; then
++        if [ -x "`which invoke-rc.d 2>/dev/null`" ]; then
++                invoke-rc.d spamassassin restart || exit $?
++        else
++                /etc/init.d/spamassassin restart || exit $?
++        fi
++fi
++
++#DEBHELPER#
+--- fuzzyocr-3.5.1+svn135.orig/debian/watch
++++ fuzzyocr-3.5.1+svn135/debian/watch
+@@ -0,0 +1,11 @@
++# Example watch control file for uscan
++# Rename this file to "watch" and then you can run the "uscan" command
++# to check for upstream updates and more.
++# See uscan(1) for format
++
++# Compulsory line, this is a version 3 file
++version=3
++
++# Uncomment to examine a Webpage 
++# <Webpage URL> <string match>
++http://fuzzyocr.own-hero.net/wiki/Downloads  http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-(.*)\.tar\.gz
+--- fuzzyocr-3.5.1+svn135.orig/debian/changelog
++++ fuzzyocr-3.5.1+svn135/debian/changelog
+@@ -0,0 +1,56 @@
++fuzzyocr (3.5.1+svn135-1) unstable; urgency=low
++
++  * This version works with spamassassin 3.2 (Closes: #500426)
++  * Upgrade to svn135 (Closes: #406396)
++  * Repair watch file (Closes: #449770)
++  * Depends on tesseract-ocr | gocr | ocrad,
++  * patches to use tesseract  (Closes: #481383).
++  * Depend on libtie-cache-perl, libdbd-mysql-perl to 
++    avoid warnings in /var/log/mail.warn ;
++    do not print warnings regarding missing executables in normal
++    mode, but only in debug mode    (Closes: #407992)
++  * Up standard to 3.8.0
++  * Do not use  pamthreshold, pamtopnm (they are not available in Debian)
++  * Do not ship full Apache license in copyright
++
++ -- A Mennucc1 <mennucc1@debian.org>  Sun, 28 Sep 2008 10:08:24 +0200
++
++fuzzyocr3 (3.5.1-2) experimental; urgency=low
++
++  * - Add upstream changelog.
++    - Add samples to /usr/share/doc/fuzzyocr3/examples.
++    - Add Utils to /usr/share/doc/fuzzyocr3/Utils.
++   thanks to gregor herrmann (Closes: #406663)
++  * do not use pam* stuff, (unavailable in netpbm, due to lack of license),
++   thanks to Alexander Elbs (Closes: #406626) 
++   &  thanks  Gary V for the patches
++  
++ -- A Mennucc1 <mennucc1@debian.org>  Wed, 17 Jan 2007 10:35:19 +0100
++
++fuzzyocr3 (3.5.1-1) experimental; urgency=low
++
++  * New upstream release
++
++ -- A Mennucc1 <mennucc1@debian.org>  Sun,  7 Jan 2007 17:07:33 +0100
++
++fuzzyocr (2.3b-2) unstable; urgency=low
++
++  * Bug fix: "fuzzyocr: Misleading error message", thanks to Adam Porter
++    (Closes: #404632).
++  * Bug fix: "fuzzyocr: Perl module path is hardcoded", thanks to Adam
++    Porter (Closes: #404627);    and also
++  * FuzzyOcr.cf : set focr_global_wordlist to /etc/spamassassin/FuzzyOcr.words
++    thanks to Michael Holtermann 
++  * added "portfolio" to sample spam words
++  
++ -- A Mennucc1 <mennucc1@debian.org>  Sat,  6 Jan 2007 10:01:26 +0100
++
++fuzzyocr (2.3b-1) unstable; urgency=low
++
++  * Initial release (Closes: #397615)
++  * Attention: the gocr binary has a bug which can cause segfaults
++    with specific images. This may turn out to be a security threat.
++    Use this sw with caution.
++
++ -- A Mennucc1 <mennucc1@debian.org>  Thu, 30 Nov 2006 11:13:32 +0100
++
+--- fuzzyocr-3.5.1+svn135.orig/debian/patches/general
++++ fuzzyocr-3.5.1+svn135/debian/patches/general
+@@ -0,0 +1,88 @@
++--- fuzzyocr-svn-135.orig/FuzzyOcr.cf
+++++ fuzzyocr-svn-135/FuzzyOcr.cf
++@@ -1,7 +1,10 @@
++ # Syntax:
++ # loadplugin <Plugin_Name> <Location>
++ #  <Location> path where Plugin resides.
++-loadplugin FuzzyOcr FuzzyOcr.pm
+++
+++loadplugin FuzzyOcr
+++
+++ifplugin FuzzyOcr
++ 
++ body     FUZZY_OCR                   eval:fuzzyocr_check()
++ body     FUZZY_OCR_WRONG_CTYPE       eval:dummy_check()
++@@ -50,8 +53,8 @@ priority FUZZY_OCR 900
++ ###
++ 
++ # Here we defined the words to scan for
++-# Default value: /etc/mail/spamassassin/FuzzyOcr.words
++-#focr_global_wordlist /etc/mail/spamassassin/FuzzyOcr.words
+++# Default value: /etc/spamassassin/FuzzyOcr.words
+++#focr_global_wordlist /etc/spamassassin/FuzzyOcr.words
++ #
++ # This is the path RELATIVE to the respective home directory
++ # for the personalized list. This list is merged with the global 
++@@ -143,8 +146,8 @@ focr_bin_helper tesseract
++ 
++ # Paths to the files containing Scansets and Preprocessors definitions
++ #
++-#focr_preprocessor_file /etc/mail/spamassassin/FuzzyOcr.preps
++-#focr_scanset_file /etc/mail/spamassassin/FuzzyOcr.scansets
+++#focr_preprocessor_file /etc/spamassassin/FuzzyOcr.preps
+++#focr_scanset_file /etc/spamassassin/FuzzyOcr.scansets
++ 
++ # Setting this to 1 will cause FuzzyOcr to skip all other scansets,
++ # if a scanset has reached the amount of hits specified in 
++@@ -313,18 +316,18 @@ focr_bin_helper tesseract
++ 
++ # If the image hash database feature is enabled (Type 1 Hashing),
++ # specify the file to use as database
++-# Default value: /etc/mail/spamassassin/FuzzyOcr.hashdb
++-#focr_digest_db /etc/mail/spamassassin/FuzzyOcr.hashdb
+++# Default value: /etc/spamassassin/FuzzyOcr.hashdb
+++#focr_digest_db /etc/spamassassin/FuzzyOcr.hashdb
++ 
++ # If the image hash db feature is enabled (Type 2 Hashing),
++ # specify the file to use as the SPAM database
++-# Default value: /etc/mail/spamassassin/FuzzyOcr.db
++-#focr_db_hash /etc/mail/spamassassin/FuzzyOcr.db
+++# Default value: /etc/spamassassin/FuzzyOcr.db
+++#focr_db_hash /etc/spamassassin/FuzzyOcr.db
++ 
++ # If the image hash db feature is enabled (Type 2 Hashing), 
++ # specify the file to use as the HAM database
++-# Default value: /etc/mail/spamassassin/FuzzyOcr.safe.db
++-#focr_db_safe /etc/mail/spamassassin/FuzzyOcr.safe.db
+++# Default value: /etc/spamassassin/FuzzyOcr.safe.db
+++#focr_db_safe /etc/spamassassin/FuzzyOcr.safe.db
++ 
++ # Auto-prune: Expire records from hasing databases after these many days
++ # Default value: 35
++@@ -374,3 +377,5 @@ focr_bin_helper tesseract
++ #################################################################
++ # DO NOT REMOVE THIS LINE, IT IS REQUIRED UNDER ALL CIRCUMSTANCES
++ focr_end_config
+++
+++endif
++--- fuzzyocr-svn-135.orig/FuzzyOcr.pm
+++++ fuzzyocr-svn-135/FuzzyOcr.pm
++@@ -36,7 +36,7 @@ use Time::HiRes qw( gettimeofday tv_inte
++ use String::Approx 'adistr';
++ use FileHandle;
++ 
++-use lib qw(/etc/mail/spamassassin); # Allow placing of FuzzyOcr in siteconfigdir
+++use lib qw(/etc/spamassassin); # Allow placing of FuzzyOcr in siteconfigdir
++ 
++ use FuzzyOcr::Logging qw(debuglog errorlog warnlog infolog);
++ use FuzzyOcr::Config qw(kill_pid
++--- fuzzyocr-svn-135.orig/FuzzyOcr.words
+++++ fuzzyocr-svn-135/FuzzyOcr.words
++@@ -14,6 +14,7 @@ company
++ money::0.01
++ million
++ thousand
+++portfolio
++ buy
++ price::0.2
++ trade
+--- fuzzyocr-3.5.1+svn135.orig/debian/patches/series
++++ fuzzyocr-3.5.1+svn135/debian/patches/series
+@@ -0,0 +1,5 @@
++general
++netpbm-DFSG
++fix_tesseract_
++enable-tesseract
++silence_log
+--- fuzzyocr-3.5.1+svn135.orig/debian/patches/silence_log
++++ fuzzyocr-3.5.1+svn135/debian/patches/silence_log
+@@ -0,0 +1,12 @@
++--- fuzzyocr-3.5.1+svn135.orig/FuzzyOcr/Config.pm
+++++ fuzzyocr-3.5.1+svn135/FuzzyOcr/Config.pm
++@@ -629,7 +629,8 @@
++             if (defined $conf->{$b}) {
++                 infolog("Using $a => $conf->{$b}");
++             } else {
++-                warnlog("Cannot find executable for $a");
+++		#do not fill logs
+++                debuglog("Cannot find executable for $a");
++             }
++         }
++     }
+--- fuzzyocr-3.5.1+svn135.orig/debian/patches/netpbm-DFSG
++++ fuzzyocr-3.5.1+svn135/debian/patches/netpbm-DFSG
+@@ -0,0 +1,51 @@
++--- fuzzyocr-svn-135.orig/FuzzyOcr.cf
+++++ fuzzyocr-svn-135/FuzzyOcr.cf
++@@ -99,7 +99,8 @@ priority FUZZY_OCR 900
++ 
++ # Include additional scanner/preprocessor commands here:
++ #
++-focr_bin_helper pnmnorm, pnminvert, pamthreshold, ppmtopgm, pamtopnm
+++focr_bin_helper pnmnorm, pnminvert,  ppmtopgm
+++#not available in Debian: pamthreshold,pamtopnm
++ focr_bin_helper tesseract
++ 
++ # These helpers must be defined before enabling PDF scanning
++--- fuzzyocr-svn-135.orig/FuzzyOcr.preps
+++++ fuzzyocr-svn-135/FuzzyOcr.preps
++@@ -16,17 +16,6 @@ preprocessor ppmtopgm {
++     command = ppmtopgm
++ }
++ 
++-# Converts PAM to PNM
++-preprocessor pamtopnm {
++-    command = pamtopnm
++-}
++-
++-# Uses thresholding on the PAM file
++-preprocessor pamthreshold {
++-    command = pamthreshold
++-    args = -simple -threshold 0.5
++-}
++-
++ # converts PNM to TIFF (this is used for tesseract)
++ preprocessor maketiff {
++     command = pnmtotiff
++--- fuzzyocr-svn-135.orig/FuzzyOcr.scansets	2008-09-26 17:08:02.000000000 +0200
+++++ fuzzyocr-svn-135/FuzzyOcr.scansets	2008-09-26 17:13:31.000000000 +0200
++@@ -20,14 +20,14 @@
++ 
++ # Inverted Ocrad scanset with decolorization
++ scanset ocrad-decolorize-invert {
++-    preprocessors = ppmtopgm, pamthreshold, pamtopnm
+++    preprocessors = ppmtopgm
++     command = $ocrad
++     args = -s5 -i $input
++ }
++ 
++ # Ocrad scanset with decolorization
++ scanset ocrad-decolorize {
++-    preprocessors = ppmtopgm, pamthreshold, pamtopnm
+++    preprocessors = ppmtopgm
++     command = $ocrad
++     args = -s5 $input
++ }
+--- fuzzyocr-3.5.1+svn135.orig/debian/patches/enable-tesseract
++++ fuzzyocr-3.5.1+svn135/debian/patches/enable-tesseract
+@@ -0,0 +1,25 @@
++Index: fuzzyocr-3+svn135/FuzzyOcr.scansets
++===================================================================
++--- fuzzyocr-3+svn135.orig/FuzzyOcr.scansets	2008-09-28 11:16:06.000000000 +0200
+++++ fuzzyocr-3+svn135/FuzzyOcr.scansets	2008-09-28 11:16:13.000000000 +0200
++@@ -44,13 +44,13 @@
++     args = -l 180 -d 2 -i $input
++ }
++ 
++-# An example Scanset how to use tesseract (disabled by default)
++-#scanset tesseract {
++-#    preprocessors = maketiff
++-#    command = $tesseract
++-#    args = $input $output 
++-#    force_output_in = $output.txt
++-#}
+++# An example Scanset how to use tesseract
+++scanset tesseract {
+++    preprocessors = maketiff
+++    command = $tesseract
+++    args = $input $output 
+++    force_output_in = $output.txt
+++}
++ 
++ # Another example, this basically does the same as the inverted Ocrad Scanset
++ # Only listed here to serve as example, ocrad-invert does this already
+--- fuzzyocr-3.5.1+svn135.orig/debian/patches/fix_tesseract_
++++ fuzzyocr-3.5.1+svn135/debian/patches/fix_tesseract_
+@@ -0,0 +1,36 @@
++Index: fuzzyocr-3+svn135/FuzzyOcr/Preprocessor.pm
++===================================================================
++--- fuzzyocr-3+svn135.orig/FuzzyOcr/Preprocessor.pm	2008-09-28 11:12:08.000000000 +0200
+++++ fuzzyocr-3+svn135/FuzzyOcr/Preprocessor.pm	2008-09-28 11:18:12.000000000 +0200
++@@ -31,7 +31,12 @@
++     my ($self, $input) = @_;
++     my $tmpdir = FuzzyOcr::Config::get_tmpdir();
++     my $label = $self->{label};
++-    my $output = "$tmpdir/prep.$label.out";
+++
+++    if ($label eq "maketiff") {
+++        $output = "$tmpdir/prep.$label.tif";
+++    } else {
+++	my $output = "$tmpdir/prep.$label.out";
+++    }
++     my $stderr = ">$tmpdir/prep.$label.err";
++ 
++     my $stdin = undef;
++Index: fuzzyocr-3+svn135/FuzzyOcr/Scanset.pm
++===================================================================
++--- fuzzyocr-3+svn135.orig/FuzzyOcr/Scanset.pm	2008-09-28 11:15:30.000000000 +0200
+++++ fuzzyocr-3+svn135/FuzzyOcr/Scanset.pm	2008-09-28 11:19:07.000000000 +0200
++@@ -80,7 +80,12 @@
++                 return ($retcode,@result);
++             }
++             # Input of next processor is output of last
++-            $input = "$tmpdir/prep.$plabel.out";
+++            # Output name of maketiff is special!
+++            if ($plabel eq "maketiff") {
+++                $input = "$tmpdir/prep.$plabel.tif";
+++            } else {
+++                $input = "$tmpdir/prep.$plabel.out";
+++            }
++         }
++     }
++ 
