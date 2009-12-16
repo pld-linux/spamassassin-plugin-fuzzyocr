@@ -4,7 +4,7 @@
 #
 %include	/usr/lib/rpm/macros.perl
 %define		subver	svn135
-%define		rel		1
+%define		rel		2
 Summary:	FuzzyOcr SpamAssassin plugin
 Summary(pl.UTF-8):	Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
@@ -34,9 +34,9 @@ Requires:	gocr >= 0.43
 Requires:	netpbm-progs >= 10.34-4
 Requires:	netpbm-progs-pstopnm >= 10.34-4
 Requires:	ocrad >= 0.14
-Requires:	perl-Compress-Zlib
 Requires:	perl-DBD-mysql
 Requires:	perl-Digest-MD5
+Requires:	perl-IO-Compress
 Requires:	perl-MLDBM-Sync
 Requires:	perl-Mail-SpamAssassin >= 3.2.3
 Requires:	perl-String-Approx
