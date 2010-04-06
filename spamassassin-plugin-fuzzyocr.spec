@@ -3,18 +3,17 @@
 %bcond_without	autodeps	# don't BR packages needed only for resolving deps
 #
 %include	/usr/lib/rpm/macros.perl
-%define		subver	svn135
-%define		rel		2
 Summary:	FuzzyOcr SpamAssassin plugin
 Summary(pl.UTF-8):	Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
-Version:	3.5.1
-Release:	1.%{subver}.%{rel}
+Version:	3.6.0
+Release:	1
 License:	Apache v2.0
 Group:		Applications/Mail
 # svn export https://svn.own-hero.net/fuzzyocr/trunk/devel fuzzyocr
-Source0:	fuzzyocr-20090519.tar.bz2
-# Source0-md5:	80bf89f38592deefb5b21c0f82e28ee4
+#Source0:	fuzzyocr-20090519.tar.bz2
+Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}.tar.gz
+# Source0-md5:	d434a339fb0bb5cc9120772325908df5
 Patch0:		%{name}-debian.patch
 URL:		http://fuzzyocr.own-hero.net/
 BuildRequires:	sed >= 4.0
@@ -87,7 +86,7 @@ Główne metody to:
 - weryfikacja Content-Type dla wiadomości z obrazkami
 
 %prep
-%setup -q -n fuzzyocr
+%setup -q -n FuzzyOcr-%{version}
 %patch0 -p1
 %{__sed} -i -e '1s,#!.*perl,#!%{__perl},' Utils/fuzzy-*
 
