@@ -9,3 +9,16 @@
          debuglog("focr_bin_helper: '$val'");
          foreach my $bin (split(',',$val)) {
              unless (grep {m/$bin/} @bin_utils) {
+--- ./FuzzyOcr/Logging.pm.ORIG	2010-02-03 10:54:38.000000000 +0100
++++ ./FuzzyOcr/Logging.pm	2010-02-03 10:55:49.000000000 +0100
+@@ -31,7 +31,8 @@ sub logfile {
+     my $time = strftime("%Y-%m-%d %H:%M:%S",localtime(time));
+     $logtext =~ s/\n/\n                      /g;
+ 
+-    unless ( open LOGFILE, ">>", $conf->{focr_logfile} ) {
++    my $fname = Mail::SpamAssassin::Util::untaint_file_path($conf->{focr_logfile});
++    unless ( open LOGFILE, ">>", $fname ) {
+        warn "Can't open $conf->{focr_logfile} for writing, check permissions";
+        return;
+     }
+

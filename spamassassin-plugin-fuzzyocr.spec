@@ -7,7 +7,7 @@ Summary:	FuzzyOcr SpamAssassin plugin
 Summary(pl.UTF-8):	Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.6.0
-Release:	2
+Release:	3
 License:	Apache v2.0
 Group:		Applications/Mail
 # svn export https://svn.own-hero.net/fuzzyocr/trunk/devel fuzzyocr
