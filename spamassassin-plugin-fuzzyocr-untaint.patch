@@ -1,0 +1,11 @@
+--- ./FuzzyOcr/Config.pm.org	2010-04-06 16:49:40.788528254 +0200
++++ ./FuzzyOcr/Config.pm	2010-04-07 12:23:05.573987960 +0200
+@@ -577,7 +577,7 @@ sub parse_config {
+         return 1;
+     } elsif ($opts->{key} eq 'focr_bin_helper') {
+         my @cmd; $conf = $opts->{conf};
+-        my $val = $opts->{value}; $val =~ s/[\s]*//g;
++        my $val = Mail::SpamAssassin::Util::untaint_var($opts->{value}); $val =~ s/[\s]*//g;
+         debuglog("focr_bin_helper: '$val'");
+         foreach my $bin (split(',',$val)) {
+             unless (grep {m/$bin/} @bin_utils) {

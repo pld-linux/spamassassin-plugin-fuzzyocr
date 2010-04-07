@@ -7,7 +7,7 @@ Summary:	FuzzyOcr SpamAssassin plugin
 Summary(pl.UTF-8):	Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
 Version:	3.6.0
-Release:	1
+Release:	2
 License:	Apache v2.0
 Group:		Applications/Mail
 # svn export https://svn.own-hero.net/fuzzyocr/trunk/devel fuzzyocr
@@ -15,6 +15,7 @@ Group:		Applications/Mail
 Source0:	http://users.own-hero.net/~decoder/fuzzyocr/fuzzyocr-%{version}.tar.gz
 # Source0-md5:	d434a339fb0bb5cc9120772325908df5
 Patch0:		%{name}-debian.patch
+Patch1:		%{name}-untaint.patch
 URL:		http://fuzzyocr.own-hero.net/
 BuildRequires:	sed >= 4.0
 %if %{with autodeps}
@@ -88,6 +89,7 @@ Główne metody to:
 %prep
 %setup -q -n FuzzyOcr-%{version}
 %patch0 -p1
+%patch1 -p1
 %{__sed} -i -e '1s,#!.*perl,#!%{__perl},' Utils/fuzzy-*
 
 for p in `cat debian/patches/series`; do
