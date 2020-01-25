@@ -2,7 +2,6 @@
 # Conditional build:
 %bcond_without	autodeps	# don't BR packages needed only for resolving deps
 #
-%include	/usr/lib/rpm/macros.perl
 Summary:	FuzzyOcr SpamAssassin plugin
 Summary(pl.UTF-8):	Wtyczka FuzzyOcr dla SpamAssassina
 Name:		spamassassin-plugin-fuzzyocr
