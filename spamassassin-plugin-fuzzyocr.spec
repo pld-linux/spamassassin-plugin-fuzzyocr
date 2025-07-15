@@ -87,8 +87,8 @@ Główne metody to:
 
 %prep
 %setup -q -n FuzzyOcr-%{version}
-%patch0 -p1
-%patch1 -p1
+%patch -P0 -p1
+%patch -P1 -p1
 %{__sed} -i -e '1s,#!.*perl,#!%{__perl},' Utils/fuzzy-*
 
 for p in `cat debian/patches/series`; do
